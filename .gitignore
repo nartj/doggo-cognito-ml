@@ -1,0 +1,7 @@
+/ml/venv/*
+/ml/.idea
+/ml/data
+.DS_Store
+/ml/models
+__pycache__/
+

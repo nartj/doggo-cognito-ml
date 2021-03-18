@@ -1,0 +1,123 @@
+<ion-header>
+    <ion-toolbar>
+        <img src="assets/icon/favicon.png" class="header-icon"/>
+
+        <ion-title>
+            Doggo Cognito
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div class="preview" *ngIf="plt.is('android')">
+        <img [src]="fileUrl" *ngIf="fileUrl"/>
+
+        <div class="actions">
+            <ion-button (click)="takePicture()">Take picture</ion-button>
+            <ion-button (click)="uploadPicture()">Select picture</ion-button>
+        </div>
+    </div>
+
+    <div class="preview" *ngIf="plt.is('desktop')">
+        <img [src]="fileUrl" *ngIf="fileUrl && !cropping" class="resize-image"/>
+        <image-cropper
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="1/1"
+                [resizeToWidth]="1200"
+                [imageQuality]="100"
+                format="jpeg"
+                (imageCropped)="imageCropped($event)" *ngIf="cropping"></image-cropper>
+        <div class="actions">
+            <input type="file" accept="image/*" id="file-input" (change)="cropPictureForm($event)"/>
+            <ion-button (click)="submitCropped()" *ngIf="cropping">Submit</ion-button>
+        </div>
+    </div>
+
+    <div class="result">
+        <ion-spinner name="crescent" *ngIf="processing"></ion-spinner>
+        <div *ngIf="recogRes">
+            <div class="wide-screen">
+                <div class="top3">
+                    <div class="two item">
+                        <div class="pos">
+                            2
+                        </div>
+                        <div class="pic" [ngStyle]="getStyle(recogRes[1]['label'])"></div>
+                        <div class="name">
+                            {{recogRes[1]['label'] | removeUnderscore | titlecase}}
+                        </div>
+                        <div class="score">
+                            {{recogRes[1]['probability']}} %
+                        </div>
+                    </div>
+                    <div class="one item">
+                        <div class="pos">
+                            1
+                        </div>
+                        <div class="pic" [ngStyle]="getStyle(recogRes[0]['label'])"></div>
+                        <div class="name">
+                            {{recogRes[0]['label'] | removeUnderscore | titlecase}}
+                        </div>
+                        <div class="score">
+                            {{recogRes[0]['probability']}} %
+                        </div>
+                    </div>
+                    <div class="three item">
+                        <div class="pos">
+                            3
+                        </div>
+                        <div class="pic" [ngStyle]="getStyle(recogRes[2]['label'])"></div>
+                        <div class="name">
+                            {{recogRes[2]['label'] | removeUnderscore | titlecase}}
+                        </div>
+                        <div class="score">
+                            {{recogRes[2]['probability']}} %
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="small-screen">
+                <div class="top3">
+                    <div class="one item">
+                        <div class="pos">
+                            1
+                        </div>
+                        <div class="pic" [ngStyle]="getStyle(recogRes[0]['label'])"></div>
+                        <div class="name">
+                            {{recogRes[0]['label'] | removeUnderscore | titlecase}}
+                        </div>
+                        <div class="score">
+                            {{recogRes[0]['probability']}} %
+                        </div>
+                    </div>
+                    <div class="two item">
+                        <div class="pos">
+                            2
+                        </div>
+                        <div class="pic" [ngStyle]="getStyle(recogRes[1]['label'])"></div>
+                        <div class="name">
+                            {{recogRes[1]['label'] | removeUnderscore | titlecase}}
+                        </div>
+                        <div class="score">
+                            {{recogRes[1]['probability']}} %
+                        </div>
+                    </div>
+                    <div class="three item">
+                        <div class="pos">
+                            3
+                        </div>
+                        <div class="pic" [ngStyle]="getStyle(recogRes[2]['label'])"></div>
+                        <div class="name">
+                            {{recogRes[2]['label'] | removeUnderscore | titlecase}}
+                        </div>
+                        <div class="score">
+                            {{recogRes[2]['probability']}} %
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</ion-content>
